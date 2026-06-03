@@ -9,29 +9,27 @@ const PRICE_MAP = {
 };
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
   try {
     if (!process.env.STRIPE_SECRET_KEY) {
-      return res.status(500).json({ error: "STRIPE_SECRET_KEY is missing in Vercel." });
+      return res.status(500).send("STRIPE_SECRET_KEY is missing in Vercel.");
     }
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-    const { cart } = req.body;
+    let cart = [];
+
+    if (req.method === "GET") {
+      if (!req.query.cart) {
+        return res.status(400).send("Cart is missing.");
+      }
+
+      cart = JSON.parse(Buffer.from(req.query.cart, "base64").toString("utf8"));
+    } else {
+      return res.status(405).send("Method not allowed");
+    }
 
     if (!cart || !Array.isArray(cart) || cart.length === 0) {
-      return res.status(400).json({ error: "Cart is empty" });
+      return res.status(400).send("Cart is empty.");
     }
 
     const line_items = cart.map((item) => {
@@ -50,9 +48,7 @@ module.exports = async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: line_items,
-
       billing_address_collection: "required",
-
       shipping_address_collection: {
         allowed_countries: [
           "SI", "HR", "AT", "DE", "IT", "HU", "FR", "ES", "NL", "BE",
@@ -60,7 +56,6 @@ module.exports = async function handler(req, res) {
           "GR", "LT", "LV", "EE", "LU", "MT", "CY"
         ]
       },
-
       shipping_options: [
         {
           shipping_rate_data: {
@@ -83,15 +78,14 @@ module.exports = async function handler(req, res) {
           }
         }
       ],
-
       success_url: "https://vorella.neocities.org/main_page.html?payment=success",
       cancel_url: "https://vorella.neocities.org/main_page.html?payment=cancelled"
     });
 
-    return res.status(200).json({ url: session.url });
+    return res.redirect(303, session.url);
 
   } catch (error) {
     console.error("Stripe checkout error:", error);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).send("Checkout error: " + error.message);
   }
 };
