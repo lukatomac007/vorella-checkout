@@ -5,7 +5,21 @@ const PRICE_MAP = {
   "Le Beau Le Parfum": "price_1TeGY9HeJndWAae849ZMG2uA",
   "Eros Flame": "price_1TeGaIHeJndWAae8JxXvf7RJ",
   "Sauvage Parfum": "price_1TeGcZHeJndWAae8SdKitPLD",
-  "Spicebomb Extreme": "price_1TeGquHeJndWAae85f6YoA9Q"
+  "Spicebomb Extreme": "price_1TeGquHeJndWAae85f6YoA9Q",
+  "Uomo Born in Roma Intense": "price_1TeIgbHeJndWAae8h6TBnbeu",
+  "The Most Wanted": "price_1TeJ0xHeJndWAae8eMbZZ5Gd",
+  "Bad Boy Cobalt": "price_1TeJ2vHeJndWAae8J4MVllEz",
+  "1 Million": "price_1TeJ4gHeJndWAae8M1bShDI9",
+  "Le Male Elixir": "price_1TeJ6IHeJndWAae8cpgpDp46",
+  "YSL Y Intense": "price_1TeJ7oHeJndWAae8g6LWJg7p",
+  "Bleu de Chanel": "price_1TeJ9QHeJndWAae8upzJ67QY",
+  "Yellow Dream": "price_1TeJB7HeJndWAae81KCJFK2V",
+  "Coral Fantasy": "price_1TeJCaHeJndWAae8TnAgGuVU",
+  "Eros Energy": "price_1TeJDvHeJndWAae8gtomP8f5",
+  "YSL MYSLF": "price_1TeJFIHeJndWAae8I7KldfJh",
+  "Eros EDT": "price_1TeJGlHeJndWAae8zEPS7wrS",
+  "Aventus": "price_1TeJIAHeJndWAae8NoL6abp7",
+  "Le Male Le Parfum": "price_1TeJJiHeJndWAae8LrI4Jzlf"
 };
 
 module.exports = async function handler(req, res) {
